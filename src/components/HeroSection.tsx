@@ -1,22 +1,25 @@
 "use client";
 
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Fingerprint } from "lucide-react";
+import { Fingerprint, Sparkles } from "lucide-react";
 import { heroContent } from "@/constants/data";
 import { triggerHaptic } from "@/lib/utils";
 import { soundManager } from "@/lib/sounds";
 
 interface HeroSectionProps {
-  onComplete: () => void;
+  onComplete: (userName: string) => void;
 }
 
 export default function HeroSection({ onComplete }: HeroSectionProps) {
   const [scanProgress, setScanProgress] = useState(0);
   const [isScanning, setIsScanning] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
+  const [showNameInput, setShowNameInput] = useState(false);
+  const [userName, setUserName] = useState("");
   const progressInterval = useRef<NodeJS.Timeout | null>(null);
   const holdStartTime = useRef<number>(0);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Mouse/Touch tracking for particles
   const mouseX = useMotionValue(0);
@@ -34,7 +37,14 @@ export default function HeroSection({ onComplete }: HeroSectionProps) {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [handleMouseMove]);
 
+  useEffect(() => {
+    if (showNameInput && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [showNameInput]);
+
   const startScan = useCallback(() => {
+    if (showNameInput) return;
     setIsScanning(true);
     holdStartTime.current = Date.now();
     triggerHaptic(50);
@@ -47,8 +57,8 @@ export default function HeroSection({ onComplete }: HeroSectionProps) {
           setIsComplete(true);
           triggerHaptic(200);
           soundManager.play("success");
-          soundManager.playBackground();
-          setTimeout(onComplete, 1500);
+          // Show name input instead of completing
+          setTimeout(() => setShowNameInput(true), 800);
           return 100;
         }
         // Haptic feedback at intervals
@@ -58,7 +68,7 @@ export default function HeroSection({ onComplete }: HeroSectionProps) {
         return newProgress;
       });
     }, 50);
-  }, [onComplete]);
+  }, [showNameInput]);
 
   const stopScan = useCallback(() => {
     if (progressInterval.current && !isComplete) {
@@ -67,6 +77,21 @@ export default function HeroSection({ onComplete }: HeroSectionProps) {
       setScanProgress(0);
     }
   }, [isComplete]);
+
+  const handleNameSubmit = () => {
+    if (userName.trim()) {
+      triggerHaptic(100);
+      soundManager.play("success");
+      soundManager.playBackground();
+      setTimeout(() => onComplete(userName.trim()), 500);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleNameSubmit();
+    }
+  };
 
   return (
     <motion.section
@@ -228,20 +253,80 @@ export default function HeroSection({ onComplete }: HeroSectionProps) {
         </motion.div>
 
         {/* Status Text */}
-        <motion.p
-          className="mt-8 text-sm font-medium"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.9 }}
-        >
-          {isComplete ? (
-            <span className="text-green-400">{heroContent.accessGrantedText}</span>
-          ) : isScanning ? (
-            <span className="text-indigo-400">{heroContent.scanningText}</span>
-          ) : (
-            <span className="text-white/40">Hold to scan</span>
+        {!showNameInput && (
+          <motion.p
+            className="mt-8 text-sm font-medium"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.9 }}
+          >
+            {isComplete ? (
+              <span className="text-green-400">{heroContent.accessGrantedText}</span>
+            ) : isScanning ? (
+              <span className="text-indigo-400">{heroContent.scanningText}</span>
+            ) : (
+              <span className="text-white/40">Hold to scan</span>
+            )}
+          </motion.p>
+        )}
+
+        {/* Name Input Modal */}
+        <AnimatePresence>
+          {showNameInput && (
+            <motion.div
+              className="absolute inset-0 flex items-center justify-center z-20 px-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.div
+                className="bg-white/10 backdrop-blur-2xl rounded-3xl p-8 border border-white/20 w-full max-w-sm"
+                initial={{ scale: 0.8, y: 50 }}
+                animate={{ scale: 1, y: 0 }}
+                transition={{ type: "spring", damping: 20 }}
+              >
+                <motion.div
+                  className="flex justify-center mb-6"
+                  animate={{ rotate: [0, 10, -10, 0] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  <Sparkles className="w-12 h-12 text-yellow-400" />
+                </motion.div>
+                
+                <h3 className="text-2xl font-bold text-white text-center mb-2 font-playfair">
+                  Welcome! ✨
+                </h3>
+                <p className="text-white/60 text-center mb-6 text-sm">
+                  What should we call you?
+                </p>
+                
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Enter your name..."
+                  className="w-full px-5 py-4 rounded-2xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/50 text-center text-lg"
+                />
+                
+                <motion.button
+                  onClick={handleNameSubmit}
+                  disabled={!userName.trim()}
+                  className={`w-full mt-4 py-4 rounded-2xl font-semibold text-lg transition-all ${
+                    userName.trim()
+                      ? "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white"
+                      : "bg-white/10 text-white/40 cursor-not-allowed"
+                  }`}
+                  whileHover={userName.trim() ? { scale: 1.02 } : {}}
+                  whileTap={userName.trim() ? { scale: 0.98 } : {}}
+                >
+                  Continue →
+                </motion.button>
+              </motion.div>
+            </motion.div>
           )}
-        </motion.p>
+        </AnimatePresence>
       </motion.div>
 
       {/* Scanning Lines Effect */}

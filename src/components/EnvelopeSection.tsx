@@ -7,7 +7,11 @@ import { envelopeContent } from "@/constants/data";
 import { triggerHaptic } from "@/lib/utils";
 import { soundManager } from "@/lib/sounds";
 
-export default function EnvelopeSection() {
+interface EnvelopeSectionProps {
+  userName: string;
+}
+
+export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
   const [isOpened, setIsOpened] = useState(false);
   const [showLetter, setShowLetter] = useState(false);
 
@@ -154,8 +158,21 @@ export default function EnvelopeSection() {
               transition={{ delay: 0.3, duration: 0.8, type: "spring" }}
             >
               <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 md:p-12 max-w-md mx-4 border border-white/20 text-center">
+                {/* Personalized Name with special effect */}
+                <motion.div
+                  className="mb-4"
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3, type: "spring" }}
+                >
+                  <span className="text-2xl text-white/60">Dear</span>
+                  <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-amber-400 via-pink-400 to-purple-400 bg-clip-text text-transparent font-playfair">
+                    {userName} 💖
+                  </h2>
+                </motion.div>
+                
                 <motion.h1
-                  className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-6 font-playfair"
+                  className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-6 font-playfair"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}

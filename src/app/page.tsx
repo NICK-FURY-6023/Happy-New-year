@@ -17,13 +17,15 @@ export default function Home() {
   const [phase, setPhase] = useState<Phase>("loading");
   const [isMuted, setIsMuted] = useState(false);
   const [showTransition, setShowTransition] = useState(false);
+  const [userName, setUserName] = useState("");
 
   const handlePreloaderComplete = () => {
     soundManager.init();
     setPhase("hero");
   };
 
-  const handleHeroComplete = () => {
+  const handleHeroComplete = (name: string) => {
+    setUserName(name);
     setPhase("main");
   };
 
@@ -75,7 +77,7 @@ export default function Home() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <RecapSection />
+            <RecapSection userName={userName} />
             <BucketListSection />
             <TransitionSection onComplete={handleTransitionComplete} />
           </motion.div>
@@ -87,7 +89,7 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            <EnvelopeSection />
+            <EnvelopeSection userName={userName} />
           </motion.div>
         )}
       </AnimatePresence>

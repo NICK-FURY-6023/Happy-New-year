@@ -5,7 +5,11 @@ import BondCard from "./cards/BondCard";
 import StatsCard from "./cards/StatsCard";
 import MusicCard from "./cards/MusicCard";
 
-export default function RecapSection() {
+interface RecapSectionProps {
+  userName: string;
+}
+
+export default function RecapSection({ userName }: RecapSectionProps) {
   return (
     <section className="min-h-screen py-20 px-4 bg-gradient-to-b from-[#0a0a0a] via-[#0f0f1a] to-[#0a0a0a]">
       <motion.div
@@ -23,9 +27,9 @@ export default function RecapSection() {
           transition={{ duration: 0.8 }}
         >
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 font-playfair">
-            Our Year in Review
+            Hey {userName}! ✨
           </h2>
-          <p className="text-white/60">Scroll through our beautiful memories</p>
+          <p className="text-white/60">Scroll through our beautiful memories together</p>
         </motion.div>
 
         {/* Cards Container - Instagram Story Style */}
