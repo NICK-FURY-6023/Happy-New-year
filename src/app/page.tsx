@@ -15,6 +15,7 @@ const TransitionSection = dynamic(() => import("@/components/TransitionSection")
 const EnvelopeSection = dynamic(() => import("@/components/EnvelopeSection"), { ssr: false });
 const CountdownTimer = dynamic(() => import("@/components/CountdownTimer"), { ssr: false });
 const MemoriesSection = dynamic(() => import("@/components/MemoriesSection"), { ssr: false });
+const PhotoGallery = dynamic(() => import("@/components/PhotoGallery"), { ssr: false });
 
 type Phase = "loading" | "hero" | "main" | "envelope";
 
@@ -89,6 +90,7 @@ export default function Home() {
             <CountdownTimer />
             <RecapSection userName={userName} />
             <MemoriesSection />
+            <PhotoGallery />
             <BucketListSection />
             <TransitionSection onComplete={handleTransitionComplete} />
           </motion.div>
