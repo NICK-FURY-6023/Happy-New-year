@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a1a"/>
+      <stop offset="50%" style="stop-color:#1a1a3a"/>
+      <stop offset="100%" style="stop-color:#0a0a1a"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffd700"/>
+      <stop offset="50%" style="stop-color:#ffed4a"/>
+      <stop offset="100%" style="stop-color:#ffd700"/>
+    </linearGradient>
+    <linearGradient id="pink" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ec4899"/>
+      <stop offset="50%" style="stop-color:#f472b6"/>
+      <stop offset="100%" style="stop-color:#ec4899"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  
+  <!-- Stars -->
+  <circle cx="100" cy="80" r="2" fill="#fff" opacity="0.8"/>
+  <circle cx="200" cy="150" r="1.5" fill="#fff" opacity="0.6"/>
+  <circle cx="350" cy="60" r="2" fill="#fff" opacity="0.7"/>
+  <circle cx="500" cy="120" r="1" fill="#fff" opacity="0.5"/>
+  <circle cx="700" cy="80" r="2" fill="#fff" opacity="0.8"/>
+  <circle cx="850" cy="150" r="1.5" fill="#fff" opacity="0.6"/>
+  <circle cx="1000" cy="60" r="2" fill="#fff" opacity="0.7"/>
+  <circle cx="1100" cy="120" r="1" fill="#fff" opacity="0.5"/>
+  <circle cx="150" cy="500" r="1.5" fill="#fff" opacity="0.6"/>
+  <circle cx="1050" cy="520" r="2" fill="#fff" opacity="0.7"/>
+  
+  <!-- Sparkles -->
+  <text x="150" y="200" font-size="30" fill="#ffd700" opacity="0.8">✨</text>
+  <text x="1000" y="180" font-size="35" fill="#ffd700" opacity="0.9">✨</text>
+  <text x="100" y="450" font-size="25" fill="#f472b6" opacity="0.7">💫</text>
+  <text x="1080" y="400" font-size="28" fill="#f472b6" opacity="0.8">💫</text>
+  
+  <!-- Fireworks -->
+  <text x="80" y="350" font-size="50" opacity="0.9">🎆</text>
+  <text x="1070" y="300" font-size="45" opacity="0.9">🎇</text>
+  
+  <!-- Hearts -->
+  <text x="250" y="550" font-size="35" opacity="0.8">💝</text>
+  <text x="900" y="560" font-size="30" opacity="0.8">💖</text>
+  
+  <!-- Main Text -->
+  <text x="600" y="220" font-family="Georgia, serif" font-size="90" font-weight="bold" fill="url(#gold)" text-anchor="middle" filter="url(#glow)">
+    Happy New Year
+  </text>
+  
+  <text x="600" y="340" font-family="Arial, sans-serif" font-size="150" font-weight="bold" fill="url(#pink)" text-anchor="middle" filter="url(#glow)">
+    2026
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="420" font-family="Arial, sans-serif" font-size="28" fill="#ffffff" text-anchor="middle" opacity="0.8">
+    A Special Wish Just For You
+  </text>
+  
+  <!-- Hearts decoration line -->
+  <text x="600" y="480" font-family="Arial" font-size="24" text-anchor="middle">
+    <tspan fill="#ec4899">💕</tspan>
+    <tspan fill="#ffffff" opacity="0.5"> ━━━━━━━ </tspan>
+    <tspan fill="#ffd700">✨</tspan>
+    <tspan fill="#ffffff" opacity="0.5"> ━━━━━━━ </tspan>
+    <tspan fill="#ec4899">💕</tspan>
+  </text>
+  
+  <!-- Made by -->
+  <text x="600" y="580" font-family="Arial, sans-serif" font-size="20" fill="#a855f7" text-anchor="middle" opacity="0.9">
+    Made with ❤️ by ₦ł₵₭ ₣ɄⱤɎ ⚒
+  </text>
+</svg>

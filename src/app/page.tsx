@@ -19,6 +19,9 @@ const PhotoGallery = dynamic(() => import("@/components/PhotoGallery"), { ssr: f
 const Snowfall = dynamic(() => import("@/components/Snowfall"), { ssr: false });
 const ShareButton = dynamic(() => import("@/components/ShareButton"), { ssr: false });
 const Footer = dynamic(() => import("@/components/Footer"), { ssr: false });
+const ScrollProgress = dynamic(() => import("@/components/ScrollProgress"), { ssr: false });
+const FloatingParticles = dynamic(() => import("@/components/FloatingParticles"), { ssr: false });
+const BackToTop = dynamic(() => import("@/components/BackToTop"), { ssr: false });
 
 type Phase = "loading" | "hero" | "main" | "envelope";
 
@@ -52,11 +55,20 @@ export default function Home() {
 
   return (
     <main className="bg-[#0a0a0a] min-h-screen overflow-x-hidden">
+      {/* Floating Particles Background */}
+      {phase !== "loading" && <FloatingParticles />}
+      
       {/* Snowfall Effect */}
       {phase !== "loading" && <Snowfall />}
       
+      {/* Scroll Progress Bar */}
+      {phase === "main" && <ScrollProgress />}
+      
       {/* Share Button */}
       {phase !== "loading" && <ShareButton />}
+      
+      {/* Back to Top Button */}
+      {phase === "main" && <BackToTop />}
       
       {/* Sound Toggle Button */}
       {phase !== "loading" && (
