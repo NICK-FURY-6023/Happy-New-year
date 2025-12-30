@@ -82,7 +82,7 @@ export const envelopeContent = {
   finalMessage: "Happy New Year 2026!",
   subMessage: "You are my favorite part of every year. Here's to another 365 days of us! 💕",
   signOff: "With all my love,",
-  name: "Your Name", // Replace with your name
+  name: "₦ł₵₭ ₣ɄⱤɎ ⚒",
 };
 
 // Sound Effects URLs (place files in public/audio/)
@@ -94,6 +94,7 @@ export const soundEffects = {
   confetti: "/audio/confetti.mp3",
   scan: "/audio/scan.mp3",
   background: "/audio/background.mp3",
+  fireworks: "/audio/fireworks.mp3",
 };
 
 // Colors (Cosmic Love Theme)

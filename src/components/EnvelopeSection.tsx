@@ -23,6 +23,7 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
     setTimeout(() => {
       setShowLetter(true);
       soundManager.play("confetti");
+      soundManager.play("fireworks");
       
       // Confetti explosion
       const duration = 5000;
