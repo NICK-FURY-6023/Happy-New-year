@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import confetti from "canvas-confetti";
 import { envelopeContent } from "@/constants/data";
 import { triggerHaptic } from "@/lib/utils";
@@ -11,9 +11,71 @@ interface EnvelopeSectionProps {
   userName: string;
 }
 
+// Firework component
+const Firework = ({ delay, x }: { delay: number; x: number }) => {
+  return (
+    <motion.div
+      className="absolute"
+      style={{ left: `${x}%`, bottom: "20%" }}
+      initial={{ opacity: 0, y: 0 }}
+      animate={{
+        opacity: [0, 1, 1, 0],
+        y: [0, -200, -250, -280],
+      }}
+      transition={{
+        duration: 2,
+        delay: delay,
+        repeat: Infinity,
+        repeatDelay: 3,
+        ease: "easeOut",
+      }}
+    >
+      <motion.div
+        className="relative"
+        animate={{
+          scale: [0, 1, 1.5, 0],
+        }}
+        transition={{
+          duration: 2,
+          delay: delay + 0.8,
+          repeat: Infinity,
+          repeatDelay: 3,
+          ease: "easeOut",
+        }}
+      >
+        {/* Firework burst */}
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-2 h-2 rounded-full"
+            style={{
+              background: ["#ff6b6b", "#feca57", "#48dbfb", "#ff9ff3", "#54a0ff", "#5f27cd"][i % 6],
+              boxShadow: `0 0 10px ${["#ff6b6b", "#feca57", "#48dbfb", "#ff9ff3", "#54a0ff", "#5f27cd"][i % 6]}`,
+            }}
+            animate={{
+              x: [0, Math.cos((i * 30 * Math.PI) / 180) * 60],
+              y: [0, Math.sin((i * 30 * Math.PI) / 180) * 60],
+              opacity: [1, 1, 0],
+              scale: [1, 1.5, 0],
+            }}
+            transition={{
+              duration: 1,
+              delay: delay + 0.8,
+              repeat: Infinity,
+              repeatDelay: 4,
+              ease: "easeOut",
+            }}
+          />
+        ))}
+      </motion.div>
+    </motion.div>
+  );
+};
+
 export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
   const [isOpened, setIsOpened] = useState(false);
   const [showLetter, setShowLetter] = useState(false);
+  const [showFireworks, setShowFireworks] = useState(false);
 
   const openEnvelope = () => {
     if (isOpened) return;
@@ -22,6 +84,7 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
     
     setTimeout(() => {
       setShowLetter(true);
+      setShowFireworks(true);
       soundManager.play("confetti");
       soundManager.play("fireworks");
       
@@ -55,6 +118,21 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
 
   return (
     <section className="min-h-screen relative flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#0a0a0a] via-[#1a0a2e] to-[#0a0a0a]">
+      {/* Sky Fireworks Animation */}
+      {showFireworks && (
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <Firework delay={0} x={15} />
+          <Firework delay={0.5} x={30} />
+          <Firework delay={1} x={50} />
+          <Firework delay={0.3} x={70} />
+          <Firework delay={0.8} x={85} />
+          <Firework delay={1.5} x={25} />
+          <Firework delay={2} x={75} />
+          <Firework delay={1.2} x={40} />
+          <Firework delay={0.7} x={60} />
+        </div>
+      )}
+      
       {/* Background Particles */}
       <div className="absolute inset-0">
         {[...Array(30)].map((_, i) => (
@@ -179,7 +257,7 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
                   </motion.div>
                   
                   <motion.h1
-                    className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 bg-clip-text text-transparent mb-6 font-playfair"
+                    className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-yellow-200 via-amber-300 to-yellow-200 bg-clip-text text-transparent mb-6 font-playfair drop-shadow-[0_0_15px_rgba(255,215,0,0.5)]"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
@@ -188,7 +266,7 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
                   </motion.h1>
                   
                   <motion.p
-                    className="text-indigo-100 text-lg mb-8 leading-relaxed font-light"
+                    className="text-white text-lg mb-8 leading-relaxed font-light drop-shadow-lg"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.7 }}
@@ -200,10 +278,10 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.9 }}
-                    className="pt-6 border-t border-white/10"
+                    className="pt-6 border-t border-white/20"
                   >
-                    <p className="text-purple-200/80 italic text-sm">{envelopeContent.signOff}</p>
-                    <p className="text-xl font-semibold mt-2 bg-gradient-to-r from-white to-indigo-200 bg-clip-text text-transparent">{envelopeContent.name}</p>
+                    <p className="text-white/90 italic text-sm drop-shadow-md">{envelopeContent.signOff}</p>
+                    <p className="text-2xl font-bold mt-3 bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 bg-clip-text text-transparent drop-shadow-lg">{envelopeContent.name}</p>
                   </motion.div>
                 </div>
                 
