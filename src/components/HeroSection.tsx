@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Fingerprint, Sparkles } from "lucide-react";
 import { heroContent } from "@/constants/data";
@@ -21,29 +21,13 @@ export default function HeroSection({ onComplete }: HeroSectionProps) {
   const holdStartTime = useRef<number>(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Mouse/Touch tracking for particles
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const springX = useSpring(mouseX, { stiffness: 100, damping: 20 });
-  const springY = useSpring(mouseY, { stiffness: 100, damping: 20 });
-
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    mouseX.set(e.clientX);
-    mouseY.set(e.clientY);
-  }, [mouseX, mouseY]);
-
-  useEffect(() => {
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [handleMouseMove]);
-
   useEffect(() => {
     if (showNameInput && inputRef.current) {
       inputRef.current.focus();
     }
   }, [showNameInput]);
 
-  const startScan = useCallback(() => {
+  const startScan = () => {
     if (showNameInput) return;
     setIsScanning(true);
     holdStartTime.current = Date.now();
@@ -68,7 +52,7 @@ export default function HeroSection({ onComplete }: HeroSectionProps) {
         return newProgress;
       });
     }, 50);
-  }, [showNameInput]);
+  };
 
   const stopScan = useCallback(() => {
     if (progressInterval.current && !isComplete) {

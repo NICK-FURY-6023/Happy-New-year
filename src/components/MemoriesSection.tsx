@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Heart, Star, Camera } from "lucide-react";
+import { Heart, Camera } from "lucide-react";
 
 const memories = [
   { id: 1, emoji: "🌅", text: "First sunrise together", color: "from-orange-500/20 to-amber-500/20" },
