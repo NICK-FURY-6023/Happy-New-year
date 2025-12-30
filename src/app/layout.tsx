@@ -6,8 +6,12 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
 
 export const metadata: Metadata = {
-  title: "The 2026 Cinematic Journey",
-  description: "An immersive journey from 2025 to 2026 - Happy New Year!",
+  title: "Happy New Year 2026 💝",
+  description: "A special New Year wish just for you! 🎉✨",
+  icons: {
+    icon: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export const viewport: Viewport = {
