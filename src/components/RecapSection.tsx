@@ -65,20 +65,12 @@ export default function RecapSection({ userName }: RecapSectionProps) {
           </motion.div>
         </div>
 
-        {/* Scroll Indicator */}
-        <motion.div
-          className="flex justify-center mt-16"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
+        {/* Static Scroll Indicator */}
+        <div className="flex justify-center mt-16">
           <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-2">
-            <motion.div
-              className="w-1 h-2 bg-white/60 rounded-full"
-              animate={{ y: [0, 12, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            />
+            <div className="w-1 h-2 bg-white/40 rounded-full" />
           </div>
-        </motion.div>
+        </div>
       </motion.div>
     </section>
   );

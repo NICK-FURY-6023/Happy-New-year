@@ -136,91 +136,47 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
           {showLetter && (
             <motion.div
               className="absolute inset-0 flex items-center justify-center px-4"
-              initial={{ opacity: 0, scale: 0.85, y: 60 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ 
-                delay: 0.3, 
-                duration: 0.9,
-                ease: [0.16, 1, 0.3, 1], // Apple's spring-like curve
-              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
             >
-              {/* Premium Glass Card - Apple Style */}
-              <motion.div 
-                className="relative bg-gradient-to-br from-[#1a1a2e]/95 via-[#16162a]/98 to-[#0f0f1e]/95 backdrop-blur-3xl rounded-[2.5rem] p-8 md:p-12 max-w-md w-full border border-white/20 text-center overflow-hidden"
+              {/* Premium Glass Card - Simple & Smooth */}
+              <div 
+                className="relative bg-gradient-to-br from-[#1a1a2e]/95 via-[#16162a]/98 to-[#0f0f1e]/95 backdrop-blur-xl rounded-3xl p-8 md:p-10 max-w-md w-full border border-white/20 text-center"
                 style={{
-                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 100px rgba(139, 92, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.6)',
                 }}
-                initial={{ rotateX: 15 }}
-                animate={{ rotateX: 0 }}
-                transition={{ delay: 0.4, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               >
-                {/* Animated gradient overlay */}
-                <motion.div 
-                  className="absolute inset-0 rounded-[2.5rem]"
-                  style={{
-                    background: 'linear-gradient(45deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.1), rgba(245, 158, 11, 0.1))',
-                  }}
-                  animate={{
-                    background: [
-                      'linear-gradient(45deg, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.05), rgba(245, 158, 11, 0.1))',
-                      'linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.05))',
-                      'linear-gradient(45deg, rgba(236, 72, 153, 0.05), rgba(245, 158, 11, 0.1), rgba(139, 92, 246, 0.15))',
-                    ]
-                  }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-                />
                 
                 {/* Content */}
                 <div className="relative z-10">
-                  {/* Personalized Name with special effect */}
-                  <motion.div
-                    className="mb-8"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                  >
+                  {/* Personalized Name */}
+                  <div className="mb-8">
                     <span className="text-base text-white/60 font-light tracking-widest uppercase">Dear</span>
                     <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-amber-200 via-rose-300 to-purple-300 bg-clip-text text-transparent font-playfair mt-2">
                       {userName} 💖
                     </h2>
-                  </motion.div>
+                  </div>
                   
-                  {/* Year Transition Animation */}
-                  <motion.div
-                    className="flex items-center justify-center gap-4 mb-4"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.6, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <motion.span
-                      className="text-2xl md:text-3xl font-bold text-white/30 line-through"
-                      animate={{ opacity: [0.3, 0.5, 0.3] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    >
+                  {/* Year Transition - Static */}
+                  <div className="flex items-center justify-center gap-4 mb-4">
+                    <span className="text-2xl md:text-3xl font-bold text-white/30 line-through">
                       2025
-                    </motion.span>
-                    <motion.span
-                      className="text-2xl"
-                      animate={{ x: [-5, 5, -5], rotate: [0, 10, -10, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                    >
-                      →
-                    </motion.span>
-                    <motion.span
+                    </span>
+                    <span className="text-2xl">→</span>
+                    <span
                       className="text-3xl md:text-4xl font-bold"
                       style={{
                         background: 'linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6)',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
                       }}
-                      animate={{ scale: [1, 1.1, 1] }}
-                      transition={{ duration: 2, repeat: Infinity }}
                     >
                       2026
-                    </motion.span>
-                  </motion.div>
+                    </span>
+                  </div>
                   
-                  <motion.h1
+                  <h1
                     className="text-3xl md:text-4xl font-bold mb-6 font-playfair"
                     style={{
                       background: 'linear-gradient(135deg, #ffd700, #ffed4a, #ffd700)',
@@ -228,117 +184,62 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
                       WebkitTextFillColor: 'transparent',
                       filter: 'drop-shadow(0 0 20px rgba(255, 215, 0, 0.4))',
                     }}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.7, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                   >
                     {envelopeContent.finalMessage}
-                  </motion.h1>
+                  </h1>
                   
-                  <motion.p
-                    className="text-white/90 text-lg mb-6 leading-relaxed font-light"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.9, duration: 0.6 }}
-                  >
+                  <p className="text-white/90 text-lg mb-6 leading-relaxed font-light">
                     {envelopeContent.subMessage}
-                  </motion.p>
+                  </p>
                   
                   {/* Inspirational Quote */}
-                  <motion.div
-                    className="bg-white/5 rounded-2xl p-4 mb-6 border border-white/10"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.0, duration: 0.6 }}
-                  >
+                  <div className="bg-white/5 rounded-2xl p-4 mb-6 border border-white/10">
                     <p className="text-white/70 text-sm italic leading-relaxed">
                       &ldquo;May this year bring you endless joy, love, and adventures. 
                       Here&apos;s to new beginnings and beautiful memories! 🌟&rdquo;
                     </p>
-                  </motion.div>
+                  </div>
                   
-                  {/* Wishes/Blessings */}
-                  <motion.div
-                    className="flex flex-wrap justify-center gap-2 mb-6"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1.1, duration: 0.6 }}
-                  >
-                    {["🎊 Joy", "💕 Love", "✨ Success", "🌈 Peace", "🎯 Dreams"].map((wish, index) => (
-                      <motion.span
+                  {/* Wishes/Blessings - Static */}
+                  <div className="flex flex-wrap justify-center gap-2 mb-6">
+                    {["🎊 Joy", "💕 Love", "✨ Success", "🌈 Peace", "🎯 Dreams"].map((wish) => (
+                      <span
                         key={wish}
-                        className="px-3 py-1.5 bg-white/10 rounded-full text-xs text-white/80 border border-white/10"
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 1.2 + index * 0.1, duration: 0.4 }}
-                        whileHover={{ scale: 1.1, backgroundColor: 'rgba(255,255,255,0.2)' }}
+                        className="px-3 py-1.5 bg-white/10 rounded-full text-xs text-white/80 border border-white/10 hover:bg-white/20 transition-colors duration-300"
                       >
                         {wish}
-                      </motion.span>
+                      </span>
                     ))}
-                  </motion.div>
+                  </div>
                   
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.3, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                    className="pt-6 border-t border-white/10"
-                  >
+                  <div className="pt-6 border-t border-white/10">
                     <p className="text-white/70 italic text-sm tracking-wide">{envelopeContent.signOff}</p>
-                    <motion.p 
+                    <p 
                       className="text-2xl font-bold mt-3"
                       style={{
                         background: 'linear-gradient(135deg, #c084fc, #e879f9, #f0abfc)',
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent',
                       }}
-                      animate={{ 
-                        textShadow: [
-                          '0 0 20px rgba(192, 132, 252, 0.5)',
-                          '0 0 40px rgba(232, 121, 249, 0.5)',
-                          '0 0 20px rgba(192, 132, 252, 0.5)',
-                        ]
-                      }}
-                      transition={{ duration: 2, repeat: Infinity }}
                     >
                       {envelopeContent.name}
-                    </motion.p>
+                    </p>
                     
-                    {/* Heart Animation */}
-                    <motion.div
-                      className="flex justify-center gap-1 mt-4"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 1.5 }}
-                    >
+                    {/* Static Hearts */}
+                    <div className="flex justify-center gap-1 mt-4">
                       {[...Array(5)].map((_, i) => (
-                        <motion.span
-                          key={i}
-                          className="text-lg"
-                          animate={{ 
-                            y: [0, -8, 0],
-                            scale: [1, 1.2, 1],
-                          }}
-                          transition={{ 
-                            duration: 1.5, 
-                            repeat: Infinity, 
-                            delay: i * 0.15,
-                            ease: "easeInOut"
-                          }}
-                        >
-                          💝
-                        </motion.span>
+                        <span key={i} className="text-lg">💝</span>
                       ))}
-                    </motion.div>
-                  </motion.div>
+                    </div>
+                  </div>
                 </div>
                 
-                {/* Static corner decorations - no animations */}
+                {/* Static corner decorations */}
                 <div className="absolute top-6 right-6 text-2xl">✨</div>
                 <div className="absolute bottom-6 left-6 text-2xl">🌟</div>
                 <div className="absolute top-6 left-6 text-xl opacity-60">💫</div>
                 <div className="absolute bottom-6 right-6 text-xl opacity-60">🎆</div>
-              </motion.div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

@@ -67,9 +67,10 @@ export default function Home() {
         <motion.button
           className="fixed top-4 right-4 z-50 w-12 h-12 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all duration-300"
           onClick={toggleMute}
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          whileTap={{ scale: 0.9 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.2 }}
         >
           {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
         </motion.button>
@@ -83,10 +84,10 @@ export default function Home() {
         {phase === "hero" && (
           <motion.div
             key="hero"
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.02 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
           >
             <HeroSection onComplete={handleHeroComplete} />
           </motion.div>
@@ -95,10 +96,10 @@ export default function Home() {
         {phase === "main" && (
           <motion.div
             key="main"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
           >
             <CountdownTimer />
             <RecapSection userName={userName} />
@@ -112,9 +113,9 @@ export default function Home() {
         {phase === "envelope" && (
           <motion.div
             key="envelope"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
           >
             <EnvelopeSection userName={userName} />
             <Footer />

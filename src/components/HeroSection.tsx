@@ -84,31 +84,24 @@ export default function HeroSection({ onComplete }: HeroSectionProps) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      {/* Optimized Animated Stars Background - Reduced for performance */}
+      {/* Static Stars Background - No animation for performance */}
       <div className="absolute inset-0 overflow-hidden">
-        {[...Array(30)].map((_, i) => (
-          <motion.div
+        {[...Array(15)].map((_, i) => (
+          <div
             key={i}
             className="absolute rounded-full bg-white"
             style={{
               width: 1 + (i % 3),
               height: 1 + (i % 3),
-              left: `${(i * 3.3) % 100}%`,
-              top: `${(i * 4.7) % 100}%`,
-            }}
-            animate={{
-              opacity: [0.1, 0.5, 0.1],
-            }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              delay: i * 0.15,
+              left: `${(i * 6.6) % 100}%`,
+              top: `${(i * 8.3) % 100}%`,
+              opacity: 0.2 + (i % 3) * 0.15,
             }}
           />
         ))}
       </div>
 
-      {/* Subtle Gradient Orbs - Simplified for performance */}
+      {/* Subtle Gradient Orbs - Static */}
       <div 
         className="absolute w-[500px] h-[500px] rounded-full bg-gradient-radial from-indigo-500/10 via-purple-500/5 to-transparent blur-3xl pointer-events-none"
       />
