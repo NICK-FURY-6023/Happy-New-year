@@ -139,20 +139,27 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
   const [showLetter, setShowLetter] = useState(false);
   const [showFireworks, setShowFireworks] = useState(false);
 
-  // Play fireworks sound repeatedly
+  // Play fireworks sound repeatedly - sky rocket burst sounds
   const playFireworksSounds = useCallback(() => {
     if (!showFireworks) return;
     
+    // Play sky rocket launch + burst sounds with staggered timing
     soundManager.play("fireworks");
     setTimeout(() => {
       soundManager.play("fireworks2");
-    }, 1500);
+    }, 800);
+    setTimeout(() => {
+      soundManager.play("fireworks3");
+    }, 1600);
+    setTimeout(() => {
+      soundManager.play("fireworks");
+    }, 2500);
   }, [showFireworks]);
 
   useEffect(() => {
     if (showFireworks) {
       playFireworksSounds();
-      const interval = setInterval(playFireworksSounds, 5000);
+      const interval = setInterval(playFireworksSounds, 4000);
       return () => clearInterval(interval);
     }
   }, [showFireworks, playFireworksSounds]);

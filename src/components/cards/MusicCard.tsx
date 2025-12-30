@@ -9,8 +9,20 @@ import { recapCards } from "@/constants/data";
 export default function MusicCard() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [audioError, setAudioError] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const progressBarRef = useRef<HTMLDivElement | null>(null);
+
+  // Format time to mm:ss
+  const formatTime = (time: number) => {
+    if (isNaN(time)) return "0:00";
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
 
   useEffect(() => {
     // Create audio element
@@ -21,16 +33,24 @@ export default function MusicCard() {
       setAudioError(true);
     });
 
-    audioRef.current.addEventListener("timeupdate", () => {
+    audioRef.current.addEventListener("loadedmetadata", () => {
       if (audioRef.current) {
+        setDuration(audioRef.current.duration);
+      }
+    });
+
+    audioRef.current.addEventListener("timeupdate", () => {
+      if (audioRef.current && !isDragging) {
         const currentProgress = (audioRef.current.currentTime / audioRef.current.duration) * 100;
         setProgress(isNaN(currentProgress) ? 0 : currentProgress);
+        setCurrentTime(audioRef.current.currentTime);
       }
     });
 
     audioRef.current.addEventListener("ended", () => {
       setIsPlaying(false);
       setProgress(0);
+      setCurrentTime(0);
     });
 
     return () => {
@@ -39,7 +59,52 @@ export default function MusicCard() {
         audioRef.current = null;
       }
     };
-  }, []);
+  }, [isDragging]);
+
+  // Handle seeking
+  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!audioRef.current || audioError || !progressBarRef.current) return;
+    
+    const rect = progressBarRef.current.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const percentage = (clickX / rect.width) * 100;
+    const clampedPercentage = Math.max(0, Math.min(100, percentage));
+    
+    const newTime = (clampedPercentage / 100) * audioRef.current.duration;
+    audioRef.current.currentTime = newTime;
+    setProgress(clampedPercentage);
+    setCurrentTime(newTime);
+  };
+
+  // Handle drag start
+  const handleDragStart = (e: React.MouseEvent<HTMLDivElement>) => {
+    setIsDragging(true);
+    handleSeek(e);
+  };
+
+  // Handle drag
+  const handleDrag = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isDragging) {
+      handleSeek(e);
+    }
+  };
+
+  // Handle drag end
+  const handleDragEnd = () => {
+    setIsDragging(false);
+  };
+
+  // Add global mouse up listener for drag end
+  useEffect(() => {
+    const handleGlobalMouseUp = () => {
+      if (isDragging) {
+        setIsDragging(false);
+      }
+    };
+    
+    window.addEventListener("mouseup", handleGlobalMouseUp);
+    return () => window.removeEventListener("mouseup", handleGlobalMouseUp);
+  }, [isDragging]);
 
   const togglePlay = () => {
     if (!audioRef.current || audioError) return;
@@ -129,12 +194,46 @@ export default function MusicCard() {
             )}
           </div>
 
-          {/* Progress Bar */}
+          {/* Progress Bar with Timestamp */}
           <div className="mb-4">
-            <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+            {/* Time Labels */}
+            <div className="flex justify-between text-xs text-white/50 mb-2 font-mono">
+              <span>{formatTime(currentTime)}</span>
+              <span>{formatTime(duration)}</span>
+            </div>
+            
+            {/* Seekable Progress Bar */}
+            <div 
+              ref={progressBarRef}
+              className="relative h-2 bg-white/10 rounded-full overflow-visible cursor-pointer group"
+              onClick={handleSeek}
+              onMouseDown={handleDragStart}
+              onMouseMove={handleDrag}
+              onMouseUp={handleDragEnd}
+              onMouseLeave={handleDragEnd}
+            >
+              {/* Progress Fill */}
               <motion.div
-                className="h-full bg-gradient-to-r from-green-500 to-emerald-400"
+                className="absolute top-0 left-0 h-full bg-gradient-to-r from-green-500 to-emerald-400 rounded-full"
                 style={{ width: `${progress}%` }}
+                transition={{ duration: isDragging ? 0 : 0.1 }}
+              />
+              
+              {/* Draggable Thumb */}
+              <motion.div
+                className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-lg shadow-green-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                style={{ left: `calc(${progress}% - 8px)` }}
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
+              />
+              
+              {/* Glow effect on hover */}
+              <div 
+                className="absolute top-0 left-0 h-full rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                style={{ 
+                  width: `${progress}%`,
+                  boxShadow: '0 0 10px rgba(16, 185, 129, 0.5)',
+                }}
               />
             </div>
           </div>

@@ -14,10 +14,10 @@ class SoundManager {
 
     // Preload all sound effects
     Object.entries(soundEffects).forEach(([key, url]) => {
-      const isFirework = key === "fireworks" || key === "fireworks2";
+      const isFirework = key.startsWith("fireworks");
       const sound = new Howl({
         src: [url],
-        volume: key === "background" ? 0.4 : isFirework ? 0.7 : 0.5,
+        volume: key === "background" ? 0.4 : isFirework ? 0.8 : 0.5,
         loop: key === "background",
         preload: true,
         html5: key === "background" || isFirework,
