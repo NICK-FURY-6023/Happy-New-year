@@ -3,54 +3,51 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
-import { Play, Pause, SkipBack, SkipForward, Volume2 } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Volume2, Music } from "lucide-react";
 import { recapCards } from "@/constants/data";
-import { Howl } from "howler";
 
 export default function MusicCard() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
-  const soundRef = useRef<Howl | null>(null);
-  const progressInterval = useRef<NodeJS.Timeout | null>(null);
+  const [audioError, setAudioError] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    soundRef.current = new Howl({
-      src: [recapCards.musicCard.song.audioUrl],
-      html5: true,
-      volume: 0.7,
-      onend: () => {
-        setIsPlaying(false);
-        setProgress(0);
-      },
+    // Create audio element
+    audioRef.current = new Audio(recapCards.musicCard.song.audioUrl);
+    audioRef.current.volume = 0.7;
+    
+    audioRef.current.addEventListener("error", () => {
+      setAudioError(true);
+    });
+
+    audioRef.current.addEventListener("timeupdate", () => {
+      if (audioRef.current) {
+        const currentProgress = (audioRef.current.currentTime / audioRef.current.duration) * 100;
+        setProgress(isNaN(currentProgress) ? 0 : currentProgress);
+      }
+    });
+
+    audioRef.current.addEventListener("ended", () => {
+      setIsPlaying(false);
+      setProgress(0);
     });
 
     return () => {
-      if (soundRef.current) {
-        soundRef.current.unload();
-      }
-      if (progressInterval.current) {
-        clearInterval(progressInterval.current);
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
       }
     };
   }, []);
 
   const togglePlay = () => {
-    if (!soundRef.current) return;
+    if (!audioRef.current || audioError) return;
 
     if (isPlaying) {
-      soundRef.current.pause();
-      if (progressInterval.current) {
-        clearInterval(progressInterval.current);
-      }
+      audioRef.current.pause();
     } else {
-      soundRef.current.play();
-      progressInterval.current = setInterval(() => {
-        if (soundRef.current) {
-          const seek = soundRef.current.seek() as number;
-          const duration = soundRef.current.duration();
-          setProgress((seek / duration) * 100);
-        }
-      }, 100);
+      audioRef.current.play().catch(() => setAudioError(true));
     }
     setIsPlaying(!isPlaying);
   };
@@ -124,6 +121,12 @@ export default function MusicCard() {
           <div className="text-center mb-4">
             <h3 className="text-white font-semibold">{recapCards.musicCard.song.title}</h3>
             <p className="text-white/60 text-sm">{recapCards.musicCard.song.artist}</p>
+            {audioError && (
+              <p className="text-amber-400/80 text-xs mt-2 flex items-center justify-center gap-1">
+                <Music size={12} />
+                Add song.mp3 to /public/audio/
+              </p>
+            )}
           </div>
 
           {/* Progress Bar */}
@@ -146,9 +149,13 @@ export default function MusicCard() {
             </motion.button>
 
             <motion.button
-              className="w-14 h-14 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center text-white shadow-lg shadow-green-500/30"
-              whileTap={{ scale: 0.9 }}
-              whileHover={{ scale: 1.05 }}
+              className={`w-14 h-14 rounded-full flex items-center justify-center text-white shadow-lg ${
+                audioError 
+                  ? "bg-white/20 shadow-none cursor-not-allowed" 
+                  : "bg-gradient-to-r from-green-500 to-emerald-500 shadow-green-500/30"
+              }`}
+              whileTap={audioError ? {} : { scale: 0.9 }}
+              whileHover={audioError ? {} : { scale: 1.05 }}
               onClick={togglePlay}
             >
               {isPlaying ? <Pause size={24} /> : <Play size={24} className="ml-1" />}
@@ -163,7 +170,7 @@ export default function MusicCard() {
           </div>
 
           {/* Audio Visualizer */}
-          {isPlaying && (
+          {isPlaying && !audioError && (
             <div className="flex items-end justify-center gap-1 mt-4 h-8">
               {[...Array(12)].map((_, i) => (
                 <motion.div

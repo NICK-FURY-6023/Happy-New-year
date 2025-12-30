@@ -152,48 +152,74 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
         <AnimatePresence>
           {showLetter && (
             <motion.div
-              className="absolute inset-0 flex items-center justify-center"
+              className="absolute inset-0 flex items-center justify-center px-4"
               initial={{ opacity: 0, scale: 0.8, y: 50 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.8, type: "spring" }}
             >
-              <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-8 md:p-12 max-w-md mx-4 border border-white/20 text-center">
-                {/* Personalized Name with special effect */}
-                <motion.div
-                  className="mb-4"
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.3, type: "spring" }}
-                >
-                  <span className="text-2xl text-white/60">Dear</span>
-                  <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-amber-400 via-pink-400 to-purple-400 bg-clip-text text-transparent font-playfair">
-                    {userName} 💖
-                  </h2>
-                </motion.div>
+              {/* Premium Glass Card - Apple Style */}
+              <div className="relative bg-gradient-to-br from-white/15 via-white/10 to-white/5 backdrop-blur-2xl rounded-[2rem] p-8 md:p-12 max-w-md w-full border border-white/20 text-center shadow-2xl shadow-purple-500/10 overflow-hidden">
+                {/* Subtle gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/10 via-transparent to-pink-500/10 rounded-[2rem]" />
                 
-                <motion.h1
-                  className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-6 font-playfair"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                >
-                  {envelopeContent.finalMessage}
-                </motion.h1>
-                <motion.p
-                  className="text-white/80 text-lg mb-8 leading-relaxed"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.7 }}
-                >
-                  {envelopeContent.subMessage}
-                </motion.p>
+                {/* Content */}
+                <div className="relative z-10">
+                  {/* Personalized Name with special effect */}
+                  <motion.div
+                    className="mb-6"
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.3, type: "spring" }}
+                  >
+                    <span className="text-lg text-indigo-300 font-light">Dear</span>
+                    <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-amber-300 via-rose-400 to-purple-400 bg-clip-text text-transparent font-playfair mt-1 drop-shadow-lg">
+                      {userName} 💖
+                    </h2>
+                  </motion.div>
+                  
+                  <motion.h1
+                    className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 bg-clip-text text-transparent mb-6 font-playfair"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    {envelopeContent.finalMessage}
+                  </motion.h1>
+                  
+                  <motion.p
+                    className="text-indigo-100 text-lg mb-8 leading-relaxed font-light"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.7 }}
+                  >
+                    {envelopeContent.subMessage}
+                  </motion.p>
+                  
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.9 }}
+                    className="pt-6 border-t border-white/10"
+                  >
+                    <p className="text-purple-200/80 italic text-sm">{envelopeContent.signOff}</p>
+                    <p className="text-xl font-semibold mt-2 bg-gradient-to-r from-white to-indigo-200 bg-clip-text text-transparent">{envelopeContent.name}</p>
+                  </motion.div>
+                </div>
+                
+                {/* Decorative sparkles */}
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.9 }}
+                  className="absolute top-4 right-4 text-2xl"
+                  animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }}
+                  transition={{ duration: 3, repeat: Infinity }}
                 >
-                  <p className="text-white/60 italic">{envelopeContent.signOff}</p>
-                  <p className="text-xl text-white font-semibold mt-2">{envelopeContent.name}</p>
+                  ✨
+                </motion.div>
+                <motion.div
+                  className="absolute bottom-4 left-4 text-2xl"
+                  animate={{ rotate: [0, -15, 15, 0], scale: [1, 1.2, 1] }}
+                  transition={{ duration: 3, repeat: Infinity, delay: 1 }}
+                >
+                  🌟
                 </motion.div>
               </div>
             </motion.div>

@@ -40,29 +40,28 @@ export default function Preloader({ onComplete }: PreloaderProps) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center"
+      className="fixed inset-0 z-50 bg-[#030303] flex flex-col items-center justify-center"
       initial={{ opacity: 1 }}
       animate={{ opacity: isComplete ? 0 : 1 }}
       transition={{ duration: 0.8 }}
     >
-      {/* Stars Background */}
+      {/* Optimized Stars Background - Less stars for better performance */}
       <div className="absolute inset-0 overflow-hidden">
-        {[...Array(50)].map((_, i) => (
+        {[...Array(20)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 bg-white rounded-full"
+            className="absolute w-0.5 h-0.5 bg-white rounded-full"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${(i * 5) % 100}%`,
+              top: `${(i * 7) % 100}%`,
             }}
             animate={{
-              opacity: [0.2, 1, 0.2],
-              scale: [1, 1.5, 1],
+              opacity: [0.1, 0.6, 0.1],
             }}
             transition={{
-              duration: 2 + Math.random() * 2,
+              duration: 3,
               repeat: Infinity,
-              delay: Math.random() * 2,
+              delay: i * 0.2,
             }}
           />
         ))}

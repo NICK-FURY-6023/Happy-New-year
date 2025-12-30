@@ -2,21 +2,25 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import Preloader from "@/components/Preloader";
 import HeroSection from "@/components/HeroSection";
-import RecapSection from "@/components/RecapSection";
-import BucketListSection from "@/components/BucketListSection";
-import TransitionSection from "@/components/TransitionSection";
-import EnvelopeSection from "@/components/EnvelopeSection";
 import { soundManager } from "@/lib/sounds";
 import { Volume2, VolumeX } from "lucide-react";
+
+// Lazy load heavy components for better performance
+const RecapSection = dynamic(() => import("@/components/RecapSection"), { ssr: false });
+const BucketListSection = dynamic(() => import("@/components/BucketListSection"), { ssr: false });
+const TransitionSection = dynamic(() => import("@/components/TransitionSection"), { ssr: false });
+const EnvelopeSection = dynamic(() => import("@/components/EnvelopeSection"), { ssr: false });
+const CountdownTimer = dynamic(() => import("@/components/CountdownTimer"), { ssr: false });
+const MemoriesSection = dynamic(() => import("@/components/MemoriesSection"), { ssr: false });
 
 type Phase = "loading" | "hero" | "main" | "envelope";
 
 export default function Home() {
   const [phase, setPhase] = useState<Phase>("loading");
   const [isMuted, setIsMuted] = useState(false);
-  const [showTransition, setShowTransition] = useState(false);
   const [userName, setUserName] = useState("");
 
   const handlePreloaderComplete = () => {
@@ -30,7 +34,6 @@ export default function Home() {
   };
 
   const handleTransitionComplete = () => {
-    setShowTransition(false);
     setPhase("envelope");
   };
 
@@ -44,13 +47,13 @@ export default function Home() {
       {/* Sound Toggle Button */}
       {phase !== "loading" && (
         <motion.button
-          className="fixed top-4 right-4 z-50 w-12 h-12 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/20 transition-all"
+          className="fixed top-4 right-4 z-50 w-12 h-12 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all duration-300"
           onClick={toggleMute}
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
           whileTap={{ scale: 0.9 }}
         >
-          {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+          {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
         </motion.button>
       )}
 
@@ -70,14 +73,16 @@ export default function Home() {
           </motion.div>
         )}
 
-        {phase === "main" && !showTransition && (
+        {phase === "main" && (
           <motion.div
             key="main"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
+            <CountdownTimer />
             <RecapSection userName={userName} />
+            <MemoriesSection />
             <BucketListSection />
             <TransitionSection onComplete={handleTransitionComplete} />
           </motion.div>

@@ -1,10 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { transitionContent } from "@/constants/data";
 import { triggerHaptic } from "@/lib/utils";
 import { soundManager } from "@/lib/sounds";
+import { Rocket } from "lucide-react";
 
 interface TransitionSectionProps {
   onComplete: () => void;
@@ -13,36 +14,44 @@ interface TransitionSectionProps {
 export default function TransitionSection({ onComplete }: TransitionSectionProps) {
   const [isTransitioning, setIsTransitioning] = useState(false);
 
+  // Pre-calculate star positions for performance
+  const stars = useMemo(() => 
+    [...Array(40)].map((_, i) => ({
+      id: i,
+      x: (Math.random() - 0.5) * 2000,
+      y: (Math.random() - 0.5) * 2000,
+      delay: i * 0.02,
+    })), []
+  );
+
   const handleTransition = () => {
     setIsTransitioning(true);
     triggerHaptic(100);
     soundManager.play("whoosh");
-    setTimeout(onComplete, 3000);
+    setTimeout(onComplete, 2500);
   };
 
   return (
-    <section className="min-h-screen relative flex items-center justify-center overflow-hidden bg-[#0a0a0a]">
-      {/* Warp Speed Effect */}
+    <section className="min-h-screen relative flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#0a0a0a] via-[#0a0a15] to-[#0a0a0a]">
+      {/* Warp Speed Effect - Optimized */}
       {isTransitioning && (
-        <motion.div className="absolute inset-0 z-20">
-          {[...Array(100)].map((_, i) => (
+        <motion.div className="absolute inset-0 z-20 flex items-center justify-center">
+          {stars.map((star) => (
             <motion.div
-              key={i}
+              key={star.id}
               className="absolute bg-white rounded-full"
               style={{
                 width: 2,
                 height: 2,
-                left: "50%",
-                top: "50%",
               }}
-              initial={{ x: 0, y: 0, opacity: 1 }}
+              initial={{ x: 0, y: 0, opacity: 1, scaleX: 1 }}
               animate={{
-                x: (Math.random() - 0.5) * window.innerWidth * 2,
-                y: (Math.random() - 0.5) * window.innerHeight * 2,
+                x: star.x,
+                y: star.y,
                 opacity: 0,
-                scaleX: 50,
+                scaleX: 30,
               }}
-              transition={{ duration: 2, ease: "easeIn", delay: Math.random() * 0.5 }}
+              transition={{ duration: 1.5, ease: "easeIn", delay: star.delay }}
             />
           ))}
         </motion.div>
@@ -54,10 +63,17 @@ export default function TransitionSection({ onComplete }: TransitionSectionProps
           className="absolute z-30 text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
+          transition={{ delay: 0.8 }}
         >
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            className="mb-4"
+          >
+            <Rocket className="w-8 h-8 text-indigo-400 mx-auto" />
+          </motion.div>
           <motion.p
-            className="text-2xl text-white font-light"
+            className="text-xl text-white/80 font-light"
             animate={{ opacity: [0.5, 1, 0.5] }}
             transition={{ duration: 1.5, repeat: Infinity }}
           >
@@ -115,15 +131,13 @@ export default function TransitionSection({ onComplete }: TransitionSectionProps
         </motion.div>
       )}
 
-      {/* Background Stars */}
-      <div className="absolute inset-0">
-        {[...Array(50)].map((_, i) => (
-          <motion.div
+      {/* Background Stars - Optimized */}
+      <div className="absolute inset-0 pointer-events-none">
+        {[...Array(15)].map((_, i) => (
+          <div
             key={i}
-            className="absolute w-1 h-1 bg-white rounded-full"
-            style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%` }}
-            animate={{ opacity: [0.2, 0.8, 0.2] }}
-            transition={{ duration: 2 + Math.random() * 2, repeat: Infinity }}
+            className="absolute w-0.5 h-0.5 bg-white/30 rounded-full"
+            style={{ left: `${(i * 7) % 100}%`, top: `${(i * 11) % 100}%` }}
           />
         ))}
       </div>

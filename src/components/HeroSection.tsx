@@ -95,53 +95,41 @@ export default function HeroSection({ onComplete }: HeroSectionProps) {
 
   return (
     <motion.section
-      className="min-h-screen relative flex flex-col items-center justify-center overflow-hidden bg-[#0a0a0a]"
+      className="min-h-screen relative flex flex-col items-center justify-center overflow-hidden bg-[#050508]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      {/* Animated Stars Background */}
+      {/* Optimized Animated Stars Background - Reduced for performance */}
       <div className="absolute inset-0 overflow-hidden">
-        {[...Array(100)].map((_, i) => (
+        {[...Array(30)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute rounded-full bg-white"
             style={{
-              width: Math.random() * 3 + 1,
-              height: Math.random() * 3 + 1,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              width: 1 + (i % 3),
+              height: 1 + (i % 3),
+              left: `${(i * 3.3) % 100}%`,
+              top: `${(i * 4.7) % 100}%`,
             }}
             animate={{
-              opacity: [0.1, 0.8, 0.1],
-              scale: [1, 1.2, 1],
+              opacity: [0.1, 0.5, 0.1],
             }}
             transition={{
-              duration: 3 + Math.random() * 4,
+              duration: 4,
               repeat: Infinity,
-              delay: Math.random() * 3,
+              delay: i * 0.15,
             }}
           />
         ))}
       </div>
 
-      {/* Gradient Orbs */}
-      <motion.div
-        className="absolute w-96 h-96 rounded-full bg-gradient-to-r from-indigo-500/20 to-purple-500/20 blur-3xl"
-        style={{ x: springX, y: springY }}
-        animate={{
-          scale: [1, 1.2, 1],
-        }}
-        transition={{ duration: 8, repeat: Infinity }}
+      {/* Subtle Gradient Orbs - Simplified for performance */}
+      <div 
+        className="absolute w-[500px] h-[500px] rounded-full bg-gradient-radial from-indigo-500/10 via-purple-500/5 to-transparent blur-3xl pointer-events-none"
       />
-      <motion.div
-        className="absolute w-64 h-64 rounded-full bg-gradient-to-r from-pink-500/20 to-orange-500/20 blur-3xl"
-        animate={{
-          x: [0, 100, 0],
-          y: [0, -50, 0],
-          scale: [1, 1.3, 1],
-        }}
-        transition={{ duration: 10, repeat: Infinity }}
+      <div
+        className="absolute w-64 h-64 rounded-full bg-gradient-to-r from-pink-500/10 to-orange-500/10 blur-3xl pointer-events-none top-1/4 right-1/4"
       />
 
       {/* Main Content */}
