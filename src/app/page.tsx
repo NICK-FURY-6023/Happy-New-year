@@ -25,6 +25,10 @@ export default function Home() {
 
   const handlePreloaderComplete = () => {
     soundManager.init();
+    // Auto-play background music after user interaction
+    setTimeout(() => {
+      soundManager.playBackground();
+    }, 500);
     setPhase("hero");
   };
 
@@ -65,9 +69,10 @@ export default function Home() {
         {phase === "hero" && (
           <motion.div
             key="hero"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.02 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
             <HeroSection onComplete={handleHeroComplete} />
           </motion.div>
@@ -76,9 +81,10 @@ export default function Home() {
         {phase === "main" && (
           <motion.div
             key="main"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             <CountdownTimer />
             <RecapSection userName={userName} />
@@ -91,8 +97,9 @@ export default function Home() {
         {phase === "envelope" && (
           <motion.div
             key="envelope"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             <EnvelopeSection userName={userName} />
           </motion.div>
