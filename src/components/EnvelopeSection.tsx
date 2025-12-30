@@ -139,28 +139,38 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
   const [showLetter, setShowLetter] = useState(false);
   const [showFireworks, setShowFireworks] = useState(false);
 
-  // Play fireworks sound repeatedly - sky rocket burst sounds
+  // Play fireworks sound - one at a time, no clash
   const playFireworksSounds = useCallback(() => {
     if (!showFireworks) return;
     
-    // Play sky rocket launch + burst sounds with staggered timing
+    // Play one firework sound at a time with proper gaps
     soundManager.play("fireworks");
-    setTimeout(() => {
-      soundManager.play("fireworks2");
-    }, 800);
-    setTimeout(() => {
-      soundManager.play("fireworks3");
-    }, 1600);
-    setTimeout(() => {
-      soundManager.play("fireworks");
-    }, 2500);
   }, [showFireworks]);
 
   useEffect(() => {
     if (showFireworks) {
-      playFireworksSounds();
-      const interval = setInterval(playFireworksSounds, 4000);
-      return () => clearInterval(interval);
+      // Start fireworks sounds after 2 seconds (after celebration sound finishes)
+      const timeout = setTimeout(() => {
+        playFireworksSounds();
+      }, 2000);
+      
+      // Play fireworks every 3 seconds, alternating between different sounds
+      let count = 0;
+      const interval = setInterval(() => {
+        count++;
+        if (count % 3 === 0) {
+          soundManager.play("fireworks");
+        } else if (count % 3 === 1) {
+          soundManager.play("fireworks2");
+        } else {
+          soundManager.play("fireworks3");
+        }
+      }, 3000);
+      
+      return () => {
+        clearTimeout(timeout);
+        clearInterval(interval);
+      };
     }
   }, [showFireworks, playFireworksSounds]);
 
@@ -173,11 +183,8 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
       setShowLetter(true);
       setShowFireworks(true);
       
-      // Play sweet celebration sounds together
+      // Play only ONE sweet celebration sound - no clash
       soundManager.play("magic");
-      setTimeout(() => {
-        soundManager.play("celebration");
-      }, 300);
       
       // Confetti explosion
       const duration = 5000;

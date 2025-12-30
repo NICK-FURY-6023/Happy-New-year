@@ -47,12 +47,10 @@ export const recapCards = {
   musicCard: {
     title: "Our Soundtrack",
     subtitle: "The songs that defined us",
-    // Replace with your actual song
     song: {
-      title: "Perfect",
-      artist: "Ed Sheeran",
+      title: "Love",
+      artist: "Bensound",
       albumArt: "/images/album.jpg",
-      // Add your audio file in public/audio/
       audioUrl: "/audio/song.mp3",
     },
   },
