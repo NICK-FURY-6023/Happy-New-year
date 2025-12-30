@@ -454,8 +454,8 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
                     transition={{ delay: 1.0, duration: 0.6 }}
                   >
                     <p className="text-white/70 text-sm italic leading-relaxed">
-                      "May this year bring you endless joy, love, and adventures. 
-                      Here's to new beginnings and beautiful memories! 🌟"
+                      &ldquo;May this year bring you endless joy, love, and adventures. 
+                      Here&apos;s to new beginnings and beautiful memories! 🌟&rdquo;
                     </p>
                   </motion.div>
                   
