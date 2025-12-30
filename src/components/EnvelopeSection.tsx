@@ -196,19 +196,27 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
   };
 
   return (
-    <section className="min-h-screen relative flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#0a0a0a] via-[#1a0a2e] to-[#0a0a0a]">
-      {/* Sky Fireworks Animation */}
+    <section className="min-h-screen relative flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#050510] via-[#0a0a20] to-[#050510]">
+      {/* Sky Fireworks Animation - Skyshot rockets going from bottom to top */}
       {showFireworks && (
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <Firework delay={0} x={15} />
-          <Firework delay={0.5} x={30} />
-          <Firework delay={1} x={50} />
-          <Firework delay={0.3} x={70} />
-          <Firework delay={0.8} x={85} />
-          <Firework delay={1.5} x={25} />
-          <Firework delay={2} x={75} />
-          <Firework delay={1.2} x={40} />
-          <Firework delay={0.7} x={60} />
+          {/* Left side rockets */}
+          <SkyshotRocket delay={0} x={8} color="red" />
+          <SkyshotRocket delay={0.8} x={15} color="gold" />
+          <SkyshotRocket delay={1.6} x={22} color="blue" />
+          
+          {/* Center-left rockets */}
+          <SkyshotRocket delay={0.4} x={30} color="pink" />
+          <SkyshotRocket delay={1.2} x={38} color="green" />
+          
+          {/* Center-right rockets */}
+          <SkyshotRocket delay={0.6} x={62} color="purple" />
+          <SkyshotRocket delay={1.4} x={70} color="gold" />
+          
+          {/* Right side rockets */}
+          <SkyshotRocket delay={0.2} x={78} color="blue" />
+          <SkyshotRocket delay={1.0} x={85} color="red" />
+          <SkyshotRocket delay={1.8} x={92} color="pink" />
         </div>
       )}
       
@@ -311,75 +319,143 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
           {showLetter && (
             <motion.div
               className="absolute inset-0 flex items-center justify-center px-4"
-              initial={{ opacity: 0, scale: 0.8, y: 50 }}
+              initial={{ opacity: 0, scale: 0.85, y: 60 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.8, type: "spring" }}
+              transition={{ 
+                delay: 0.3, 
+                duration: 0.9,
+                ease: [0.16, 1, 0.3, 1], // Apple's spring-like curve
+              }}
             >
               {/* Premium Glass Card - Apple Style */}
-              <div className="relative bg-gradient-to-br from-black/80 via-[#1a0a2e]/90 to-black/80 backdrop-blur-2xl rounded-[2rem] p-8 md:p-12 max-w-md w-full border border-white/30 text-center shadow-2xl shadow-purple-500/20 overflow-hidden">
-                {/* Subtle gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/20 via-transparent to-pink-500/20 rounded-[2rem]" />
+              <motion.div 
+                className="relative bg-gradient-to-br from-[#1a1a2e]/95 via-[#16162a]/98 to-[#0f0f1e]/95 backdrop-blur-3xl rounded-[2.5rem] p-8 md:p-12 max-w-md w-full border border-white/20 text-center overflow-hidden"
+                style={{
+                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 100px rgba(139, 92, 246, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+                }}
+                initial={{ rotateX: 15 }}
+                animate={{ rotateX: 0 }}
+                transition={{ delay: 0.4, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              >
+                {/* Animated gradient overlay */}
+                <motion.div 
+                  className="absolute inset-0 rounded-[2.5rem]"
+                  style={{
+                    background: 'linear-gradient(45deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.1), rgba(245, 158, 11, 0.1))',
+                  }}
+                  animate={{
+                    background: [
+                      'linear-gradient(45deg, rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.05), rgba(245, 158, 11, 0.1))',
+                      'linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(139, 92, 246, 0.15), rgba(236, 72, 153, 0.05))',
+                      'linear-gradient(45deg, rgba(236, 72, 153, 0.05), rgba(245, 158, 11, 0.1), rgba(139, 92, 246, 0.15))',
+                    ]
+                  }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+                />
                 
                 {/* Content */}
                 <div className="relative z-10">
                   {/* Personalized Name with special effect */}
                   <motion.div
-                    className="mb-6"
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.3, type: "spring" }}
+                    className="mb-8"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    <span className="text-lg text-indigo-300 font-light">Dear</span>
-                    <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-amber-300 via-rose-400 to-purple-400 bg-clip-text text-transparent font-playfair mt-1 drop-shadow-lg">
+                    <span className="text-base text-white/60 font-light tracking-widest uppercase">Dear</span>
+                    <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-amber-200 via-rose-300 to-purple-300 bg-clip-text text-transparent font-playfair mt-2">
                       {userName} 💖
                     </h2>
                   </motion.div>
                   
                   <motion.h1
-                    className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-yellow-200 via-amber-300 to-yellow-200 bg-clip-text text-transparent mb-6 font-playfair drop-shadow-[0_0_15px_rgba(255,215,0,0.5)]"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
+                    className="text-3xl md:text-4xl font-bold mb-6 font-playfair"
+                    style={{
+                      background: 'linear-gradient(135deg, #ffd700, #ffed4a, #ffd700)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      filter: 'drop-shadow(0 0 20px rgba(255, 215, 0, 0.4))',
+                    }}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.7, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                   >
                     {envelopeContent.finalMessage}
                   </motion.h1>
                   
                   <motion.p
-                    className="text-white text-lg mb-8 leading-relaxed font-light drop-shadow-lg"
+                    className="text-white/90 text-lg mb-8 leading-relaxed font-light"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.7 }}
+                    transition={{ delay: 0.9, duration: 0.6 }}
                   >
                     {envelopeContent.subMessage}
                   </motion.p>
                   
                   <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.9 }}
-                    className="pt-6 border-t border-white/20"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                    className="pt-6 border-t border-white/10"
                   >
-                    <p className="text-white/90 italic text-sm drop-shadow-md">{envelopeContent.signOff}</p>
-                    <p className="text-2xl font-bold mt-3 bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 bg-clip-text text-transparent drop-shadow-lg">{envelopeContent.name}</p>
+                    <p className="text-white/70 italic text-sm tracking-wide">{envelopeContent.signOff}</p>
+                    <motion.p 
+                      className="text-2xl font-bold mt-3"
+                      style={{
+                        background: 'linear-gradient(135deg, #c084fc, #e879f9, #f0abfc)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                      }}
+                      animate={{ 
+                        textShadow: [
+                          '0 0 20px rgba(192, 132, 252, 0.5)',
+                          '0 0 40px rgba(232, 121, 249, 0.5)',
+                          '0 0 20px rgba(192, 132, 252, 0.5)',
+                        ]
+                      }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      {envelopeContent.name}
+                    </motion.p>
                   </motion.div>
                 </div>
                 
-                {/* Decorative sparkles */}
+                {/* Corner decorations */}
                 <motion.div
-                  className="absolute top-4 right-4 text-2xl"
-                  animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }}
-                  transition={{ duration: 3, repeat: Infinity }}
+                  className="absolute top-6 right-6 text-2xl"
+                  animate={{ 
+                    rotate: [0, 10, -10, 0],
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                 >
                   ✨
                 </motion.div>
                 <motion.div
-                  className="absolute bottom-4 left-4 text-2xl"
-                  animate={{ rotate: [0, -15, 15, 0], scale: [1, 1.2, 1] }}
-                  transition={{ duration: 3, repeat: Infinity, delay: 1 }}
+                  className="absolute bottom-6 left-6 text-2xl"
+                  animate={{ 
+                    rotate: [0, -10, 10, 0],
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 2 }}
                 >
                   🌟
                 </motion.div>
-              </div>
+                <motion.div
+                  className="absolute top-6 left-6 text-xl opacity-60"
+                  animate={{ opacity: [0.4, 0.8, 0.4] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                >
+                  💫
+                </motion.div>
+                <motion.div
+                  className="absolute bottom-6 right-6 text-xl opacity-60"
+                  animate={{ opacity: [0.4, 0.8, 0.4] }}
+                  transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
+                >
+                  🎆
+                </motion.div>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
