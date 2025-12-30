@@ -95,6 +95,7 @@ export const soundEffects = {
   scan: "/audio/scan.mp3",
   background: "/audio/background.mp3",
   fireworks: "/audio/fireworks.mp3",
+  fireworks2: "/audio/fireworks2.mp3",
 };
 
 // Colors (Cosmic Love Theme)
