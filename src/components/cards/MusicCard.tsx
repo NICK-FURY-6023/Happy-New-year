@@ -65,15 +65,21 @@ export default function MusicCard() {
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!audioRef.current || audioError || !progressBarRef.current) return;
     
+    // Check if duration is valid before seeking
+    const audioDuration = audioRef.current.duration;
+    if (!audioDuration || !isFinite(audioDuration) || audioDuration <= 0) return;
+    
     const rect = progressBarRef.current.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
     const percentage = (clickX / rect.width) * 100;
     const clampedPercentage = Math.max(0, Math.min(100, percentage));
     
-    const newTime = (clampedPercentage / 100) * audioRef.current.duration;
-    audioRef.current.currentTime = newTime;
-    setProgress(clampedPercentage);
-    setCurrentTime(newTime);
+    const newTime = (clampedPercentage / 100) * audioDuration;
+    if (isFinite(newTime)) {
+      audioRef.current.currentTime = newTime;
+      setProgress(clampedPercentage);
+      setCurrentTime(newTime);
+    }
   };
 
   // Handle drag start
