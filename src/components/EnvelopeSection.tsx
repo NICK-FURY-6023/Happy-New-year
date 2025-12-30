@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import confetti from "canvas-confetti";
 import { envelopeContent } from "@/constants/data";
 import { triggerHaptic } from "@/lib/utils";
@@ -11,159 +11,9 @@ interface EnvelopeSectionProps {
   userName: string;
 }
 
-// Skyshot Rocket Component - Goes from bottom to top then bursts
-const SkyshotRocket = ({ delay, x, color }: { delay: number; x: number; color: string }) => {
-  const colors = {
-    red: { trail: "#ff4444", burst: ["#ff6b6b", "#ff8787", "#ffa8a8"] },
-    gold: { trail: "#ffd700", burst: ["#feca57", "#ffe066", "#fff3b0"] },
-    blue: { trail: "#4dabf7", burst: ["#48dbfb", "#74c0fc", "#a5d8ff"] },
-    pink: { trail: "#f06595", burst: ["#ff9ff3", "#faa2c1", "#ffdeeb"] },
-    green: { trail: "#40c057", burst: ["#69db7c", "#8ce99a", "#b2f2bb"] },
-    purple: { trail: "#7950f2", burst: ["#9775fa", "#b197fc", "#d0bfff"] },
-  };
-  
-  const colorScheme = colors[color as keyof typeof colors] || colors.gold;
-
-  return (
-    <motion.div
-      className="absolute"
-      style={{ left: `${x}%`, bottom: 0 }}
-    >
-      {/* Rocket Trail - Goes up */}
-      <motion.div
-        className="relative"
-        initial={{ y: 100, opacity: 0 }}
-        animate={{ 
-          y: [100, -350],
-          opacity: [0, 1, 1, 0]
-        }}
-        transition={{
-          duration: 1.2,
-          delay: delay,
-          repeat: Infinity,
-          repeatDelay: 4 + Math.random() * 2,
-          ease: [0.36, 0, 0.66, -0.56], // Accelerating upward
-        }}
-      >
-        {/* Rocket head */}
-        <motion.div
-          className="w-2 h-2 rounded-full"
-          style={{ 
-            background: colorScheme.trail,
-            boxShadow: `0 0 15px ${colorScheme.trail}, 0 0 30px ${colorScheme.trail}`,
-          }}
-        />
-        {/* Trail */}
-        <motion.div
-          className="absolute top-2 left-1/2 -translate-x-1/2 w-1"
-          style={{
-            background: `linear-gradient(to bottom, ${colorScheme.trail}, transparent)`,
-            height: '60px',
-          }}
-        />
-      </motion.div>
-
-      {/* Burst Effect - Appears after rocket reaches top */}
-      <motion.div
-        className="absolute"
-        style={{ top: -350, left: 0 }}
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ 
-          scale: [0, 1, 1.2, 0],
-          opacity: [0, 1, 1, 0]
-        }}
-        transition={{
-          duration: 1.5,
-          delay: delay + 1.1,
-          repeat: Infinity,
-          repeatDelay: 4 + Math.random() * 2,
-          ease: "easeOut",
-        }}
-      >
-        {/* Burst particles */}
-        {[...Array(16)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 rounded-full"
-            style={{
-              background: colorScheme.burst[i % 3],
-              boxShadow: `0 0 8px ${colorScheme.burst[i % 3]}, 0 0 16px ${colorScheme.burst[i % 3]}`,
-            }}
-            initial={{ x: 0, y: 0, scale: 1 }}
-            animate={{
-              x: Math.cos((i * 22.5 * Math.PI) / 180) * (50 + Math.random() * 30),
-              y: Math.sin((i * 22.5 * Math.PI) / 180) * (50 + Math.random() * 30) + 20,
-              scale: [1, 1.2, 0],
-              opacity: [1, 0.8, 0],
-            }}
-            transition={{
-              duration: 1.2,
-              delay: delay + 1.1,
-              repeat: Infinity,
-              repeatDelay: 4 + Math.random() * 2,
-              ease: "easeOut",
-            }}
-          />
-        ))}
-        {/* Inner sparkles */}
-        {[...Array(8)].map((_, i) => (
-          <motion.div
-            key={`inner-${i}`}
-            className="absolute w-1 h-1 rounded-full"
-            style={{
-              background: '#fff',
-              boxShadow: `0 0 4px #fff, 0 0 8px ${colorScheme.trail}`,
-            }}
-            initial={{ x: 0, y: 0 }}
-            animate={{
-              x: Math.cos((i * 45 * Math.PI) / 180) * 25,
-              y: Math.sin((i * 45 * Math.PI) / 180) * 25,
-              opacity: [1, 0],
-            }}
-            transition={{
-              duration: 0.8,
-              delay: delay + 1.15,
-              repeat: Infinity,
-              repeatDelay: 4 + Math.random() * 2,
-              ease: "easeOut",
-            }}
-          />
-        ))}
-      </motion.div>
-    </motion.div>
-  );
-};
-
 export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
   const [isOpened, setIsOpened] = useState(false);
   const [showLetter, setShowLetter] = useState(false);
-  const [showFireworks, setShowFireworks] = useState(false);
-
-  useEffect(() => {
-    if (showFireworks) {
-      // Play ONE firework sound after 3 seconds, then every 5 seconds
-      const timeout = setTimeout(() => {
-        soundManager.play("fireworks");
-      }, 3000);
-      
-      // Play fireworks less frequently - every 5 seconds
-      let count = 0;
-      const interval = setInterval(() => {
-        count++;
-        // Only play one sound at a time, alternate
-        if (count % 2 === 0) {
-          soundManager.play("fireworks2");
-        } else {
-          soundManager.play("fireworks");
-        }
-      }, 5000);
-      
-      return () => {
-        clearTimeout(timeout);
-        clearInterval(interval);
-      };
-    }
-  }, [showFireworks]);
 
   const openEnvelope = () => {
     if (isOpened) return;
@@ -172,67 +22,34 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
     
     setTimeout(() => {
       setShowLetter(true);
-      setShowFireworks(true);
       
       // Play celebration sound after a small delay
       setTimeout(() => {
         soundManager.play("celebration");
       }, 500);
       
-      // Confetti explosion - reduced particles
-      const duration = 3000;
-      const end = Date.now() + duration;
-
-      const frame = () => {
-        confetti({
-          particleCount: 2,
-          angle: 60,
-          spread: 55,
-          origin: { x: 0, y: 0.8 },
-          colors: ["#6366f1", "#8b5cf6", "#ec4899", "#f59e0b"],
-        });
-        confetti({
-          particleCount: 2,
-          angle: 120,
-          spread: 55,
-          origin: { x: 1, y: 0.8 },
-          colors: ["#6366f1", "#8b5cf6", "#ec4899", "#f59e0b"],
-        });
-
-        if (Date.now() < end) {
-          requestAnimationFrame(frame);
-        }
-      };
-      frame();
+      // Simple confetti burst - one time only
+      confetti({
+        particleCount: 50,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ["#6366f1", "#8b5cf6", "#ec4899", "#f59e0b"],
+      });
     }, 1000);
   };
 
   return (
     <section className="min-h-screen relative flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#050510] via-[#0a0a20] to-[#050510]">
-      {/* Sky Fireworks Animation - Reduced rockets for performance */}
-      {showFireworks && (
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Only 4 rockets for smooth performance */}
-          <SkyshotRocket delay={0} x={15} color="red" />
-          <SkyshotRocket delay={1.5} x={35} color="gold" />
-          <SkyshotRocket delay={0.8} x={65} color="blue" />
-          <SkyshotRocket delay={2} x={85} color="pink" />
-        </div>
-      )}
-      
-      {/* Background Particles - Reduced for performance */}
-      <div className="absolute inset-0">
-        {[...Array(10)].map((_, i) => (
-          <motion.div
+      {/* Simple static stars instead of animated particles */}
+      <div className="absolute inset-0 pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <div
             key={i}
-            className="absolute w-2 h-2 rounded-full"
+            className="absolute w-1 h-1 bg-white/30 rounded-full"
             style={{
-              background: `radial-gradient(circle, ${["#6366f1", "#8b5cf6", "#ec4899"][i % 3]}, transparent)`,
-              left: `${10 + (i * 9)}%`,
-              top: `${15 + (i * 8)}%`,
+              left: `${5 + (i * 4.5)}%`,
+              top: `${10 + ((i * 17) % 80)}%`,
             }}
-            animate={{ y: [-15, 15, -15], opacity: [0.2, 0.5, 0.2] }}
-            transition={{ duration: 5 + i, repeat: Infinity, delay: i * 0.5 }}
           />
         ))}
       </div>
@@ -516,65 +333,11 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
                   </motion.div>
                 </div>
                 
-                {/* Floating Stars Background */}
-                {[...Array(8)].map((_, i) => (
-                  <motion.div
-                    key={`star-${i}`}
-                    className="absolute text-lg pointer-events-none"
-                    style={{
-                      top: `${10 + Math.random() * 80}%`,
-                      left: `${5 + Math.random() * 90}%`,
-                    }}
-                    animate={{
-                      opacity: [0.2, 0.6, 0.2],
-                      scale: [0.8, 1.2, 0.8],
-                      rotate: [0, 180, 360],
-                    }}
-                    transition={{
-                      duration: 3 + Math.random() * 2,
-                      repeat: Infinity,
-                      delay: i * 0.3,
-                    }}
-                  >
-                    {["⭐", "✨", "💫", "🌟"][i % 4]}
-                  </motion.div>
-                ))}
-                
-                {/* Corner decorations */}
-                <motion.div
-                  className="absolute top-6 right-6 text-2xl"
-                  animate={{ 
-                    rotate: [0, 10, -10, 0],
-                    scale: [1, 1.1, 1],
-                  }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  ✨
-                </motion.div>
-                <motion.div
-                  className="absolute bottom-6 left-6 text-2xl"
-                  animate={{ 
-                    rotate: [0, -10, 10, 0],
-                    scale: [1, 1.1, 1],
-                  }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-                >
-                  🌟
-                </motion.div>
-                <motion.div
-                  className="absolute top-6 left-6 text-xl opacity-60"
-                  animate={{ opacity: [0.4, 0.8, 0.4] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                >
-                  💫
-                </motion.div>
-                <motion.div
-                  className="absolute bottom-6 right-6 text-xl opacity-60"
-                  animate={{ opacity: [0.4, 0.8, 0.4] }}
-                  transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
-                >
-                  🎆
-                </motion.div>
+                {/* Static corner decorations - no animations */}
+                <div className="absolute top-6 right-6 text-2xl">✨</div>
+                <div className="absolute bottom-6 left-6 text-2xl">🌟</div>
+                <div className="absolute top-6 left-6 text-xl opacity-60">💫</div>
+                <div className="absolute bottom-6 right-6 text-xl opacity-60">🎆</div>
               </motion.div>
             </motion.div>
           )}
