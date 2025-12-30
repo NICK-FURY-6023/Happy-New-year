@@ -18,27 +18,27 @@ export default function Snowfall() {
 
   useEffect(() => {
     const flakes: Snowflake[] = [];
-    // Regular snowflakes
-    for (let i = 0; i < 40; i++) {
+    // Reduced snowflakes for performance
+    for (let i = 0; i < 15; i++) {
       flakes.push({
         id: i,
         x: Math.random() * 100,
-        size: Math.random() * 4 + 2,
-        duration: Math.random() * 10 + 10,
-        delay: Math.random() * 10,
-        opacity: Math.random() * 0.6 + 0.2,
+        size: Math.random() * 3 + 2,
+        duration: Math.random() * 12 + 12,
+        delay: Math.random() * 8,
+        opacity: Math.random() * 0.5 + 0.2,
         type: "snow",
       });
     }
-    // Sparkles
-    for (let i = 40; i < 60; i++) {
+    // Reduced sparkles
+    for (let i = 15; i < 22; i++) {
       flakes.push({
         id: i,
         x: Math.random() * 100,
-        size: Math.random() * 8 + 6,
-        duration: Math.random() * 15 + 12,
-        delay: Math.random() * 8,
-        opacity: Math.random() * 0.8 + 0.2,
+        size: Math.random() * 6 + 5,
+        duration: Math.random() * 18 + 15,
+        delay: Math.random() * 6,
+        opacity: Math.random() * 0.6 + 0.2,
         type: "sparkle",
       });
     }

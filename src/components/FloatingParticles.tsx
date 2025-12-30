@@ -26,15 +26,16 @@ export default function FloatingParticles() {
 
   useEffect(() => {
     const newParticles: Particle[] = [];
-    for (let i = 0; i < 25; i++) {
+    // Reduced to 8 particles for better performance
+    for (let i = 0; i < 8; i++) {
       newParticles.push({
         id: i,
         x: Math.random() * 100,
         y: Math.random() * 100,
-        size: Math.random() * 80 + 40,
+        size: Math.random() * 60 + 30,
         color: colors[Math.floor(Math.random() * colors.length)],
-        duration: Math.random() * 20 + 15,
-        delay: Math.random() * 5,
+        duration: Math.random() * 25 + 20,
+        delay: Math.random() * 3,
       });
     }
     setParticles(newParticles);

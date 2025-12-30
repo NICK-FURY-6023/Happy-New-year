@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import confetti from "canvas-confetti";
 import { envelopeContent } from "@/constants/data";
 import { triggerHaptic } from "@/lib/utils";
@@ -139,40 +139,31 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
   const [showLetter, setShowLetter] = useState(false);
   const [showFireworks, setShowFireworks] = useState(false);
 
-  // Play fireworks sound - one at a time, no clash
-  const playFireworksSounds = useCallback(() => {
-    if (!showFireworks) return;
-    
-    // Play one firework sound at a time with proper gaps
-    soundManager.play("fireworks");
-  }, [showFireworks]);
-
   useEffect(() => {
     if (showFireworks) {
-      // Start fireworks sounds after 2 seconds (after celebration sound finishes)
+      // Play ONE firework sound after 3 seconds, then every 5 seconds
       const timeout = setTimeout(() => {
-        playFireworksSounds();
-      }, 2000);
+        soundManager.play("fireworks");
+      }, 3000);
       
-      // Play fireworks every 3 seconds, alternating between different sounds
+      // Play fireworks less frequently - every 5 seconds
       let count = 0;
       const interval = setInterval(() => {
         count++;
-        if (count % 3 === 0) {
-          soundManager.play("fireworks");
-        } else if (count % 3 === 1) {
+        // Only play one sound at a time, alternate
+        if (count % 2 === 0) {
           soundManager.play("fireworks2");
         } else {
-          soundManager.play("fireworks3");
+          soundManager.play("fireworks");
         }
-      }, 3000);
+      }, 5000);
       
       return () => {
         clearTimeout(timeout);
         clearInterval(interval);
       };
     }
-  }, [showFireworks, playFireworksSounds]);
+  }, [showFireworks]);
 
   const openEnvelope = () => {
     if (isOpened) return;
@@ -183,23 +174,25 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
       setShowLetter(true);
       setShowFireworks(true);
       
-      // Play only ONE sweet celebration sound - no clash
-      soundManager.play("magic");
+      // Play celebration sound after a small delay
+      setTimeout(() => {
+        soundManager.play("celebration");
+      }, 500);
       
-      // Confetti explosion
-      const duration = 5000;
+      // Confetti explosion - reduced particles
+      const duration = 3000;
       const end = Date.now() + duration;
 
       const frame = () => {
         confetti({
-          particleCount: 3,
+          particleCount: 2,
           angle: 60,
           spread: 55,
           origin: { x: 0, y: 0.8 },
           colors: ["#6366f1", "#8b5cf6", "#ec4899", "#f59e0b"],
         });
         confetti({
-          particleCount: 3,
+          particleCount: 2,
           angle: 120,
           spread: 55,
           origin: { x: 1, y: 0.8 },
@@ -216,42 +209,30 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
 
   return (
     <section className="min-h-screen relative flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#050510] via-[#0a0a20] to-[#050510]">
-      {/* Sky Fireworks Animation - Skyshot rockets going from bottom to top */}
+      {/* Sky Fireworks Animation - Reduced rockets for performance */}
       {showFireworks && (
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Left side rockets */}
-          <SkyshotRocket delay={0} x={8} color="red" />
-          <SkyshotRocket delay={0.8} x={15} color="gold" />
-          <SkyshotRocket delay={1.6} x={22} color="blue" />
-          
-          {/* Center-left rockets */}
-          <SkyshotRocket delay={0.4} x={30} color="pink" />
-          <SkyshotRocket delay={1.2} x={38} color="green" />
-          
-          {/* Center-right rockets */}
-          <SkyshotRocket delay={0.6} x={62} color="purple" />
-          <SkyshotRocket delay={1.4} x={70} color="gold" />
-          
-          {/* Right side rockets */}
-          <SkyshotRocket delay={0.2} x={78} color="blue" />
-          <SkyshotRocket delay={1.0} x={85} color="red" />
-          <SkyshotRocket delay={1.8} x={92} color="pink" />
+          {/* Only 4 rockets for smooth performance */}
+          <SkyshotRocket delay={0} x={15} color="red" />
+          <SkyshotRocket delay={1.5} x={35} color="gold" />
+          <SkyshotRocket delay={0.8} x={65} color="blue" />
+          <SkyshotRocket delay={2} x={85} color="pink" />
         </div>
       )}
       
-      {/* Background Particles */}
+      {/* Background Particles - Reduced for performance */}
       <div className="absolute inset-0">
-        {[...Array(30)].map((_, i) => (
+        {[...Array(10)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute w-2 h-2 rounded-full"
             style={{
               background: `radial-gradient(circle, ${["#6366f1", "#8b5cf6", "#ec4899"][i % 3]}, transparent)`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${10 + (i * 9)}%`,
+              top: `${15 + (i * 8)}%`,
             }}
-            animate={{ y: [-20, 20, -20], opacity: [0.3, 0.7, 0.3] }}
-            transition={{ duration: 4 + Math.random() * 2, repeat: Infinity, delay: Math.random() * 2 }}
+            animate={{ y: [-15, 15, -15], opacity: [0.2, 0.5, 0.2] }}
+            transition={{ duration: 5 + i, repeat: Infinity, delay: i * 0.5 }}
           />
         ))}
       </div>

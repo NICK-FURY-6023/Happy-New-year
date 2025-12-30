@@ -8,19 +8,23 @@ class SoundManager {
   private initialized = false;
   private backgroundMusic: Howl | null = null;
   private isMuted = false;
+  private currentlyPlaying: Set<string> = new Set();
 
   init() {
     if (this.initialized || typeof window === "undefined") return;
 
-    // Preload all sound effects
+    // Preload all sound effects with lower volumes
     Object.entries(soundEffects).forEach(([key, url]) => {
       const isFirework = key.startsWith("fireworks");
       const sound = new Howl({
         src: [url],
-        volume: key === "background" ? 0.4 : isFirework ? 0.8 : 0.5,
+        volume: key === "background" ? 0.25 : isFirework ? 0.4 : 0.3,
         loop: key === "background",
         preload: true,
-        html5: key === "background" || isFirework,
+        html5: key === "background",
+        onend: () => {
+          this.currentlyPlaying.delete(key);
+        },
       });
 
       this.sounds.set(key, sound);
@@ -35,8 +39,17 @@ class SoundManager {
 
   play(soundName: keyof typeof soundEffects) {
     if (this.isMuted) return;
+    
+    // Don't play if already playing (prevents overlap)
+    if (this.currentlyPlaying.has(soundName)) return;
+    
+    // Don't play more than 2 sounds at once (excluding background)
+    const activeSounds = Array.from(this.currentlyPlaying).filter(s => s !== "background");
+    if (activeSounds.length >= 2) return;
+    
     const sound = this.sounds.get(soundName);
     if (sound) {
+      this.currentlyPlaying.add(soundName);
       sound.play();
     }
   }
