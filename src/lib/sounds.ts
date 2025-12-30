@@ -16,10 +16,10 @@ class SoundManager {
     Object.entries(soundEffects).forEach(([key, url]) => {
       const sound = new Howl({
         src: [url],
-        volume: key === "background" ? 0.3 : 0.5,
+        volume: key === "background" ? 0.4 : key === "fireworks" ? 0.6 : 0.5,
         loop: key === "background",
         preload: true,
-        html5: key === "background",
+        html5: key === "background" || key === "fireworks",
       });
 
       this.sounds.set(key, sound);
