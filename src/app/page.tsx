@@ -16,6 +16,9 @@ const EnvelopeSection = dynamic(() => import("@/components/EnvelopeSection"), { 
 const CountdownTimer = dynamic(() => import("@/components/CountdownTimer"), { ssr: false });
 const MemoriesSection = dynamic(() => import("@/components/MemoriesSection"), { ssr: false });
 const PhotoGallery = dynamic(() => import("@/components/PhotoGallery"), { ssr: false });
+const Snowfall = dynamic(() => import("@/components/Snowfall"), { ssr: false });
+const ShareButton = dynamic(() => import("@/components/ShareButton"), { ssr: false });
+const Footer = dynamic(() => import("@/components/Footer"), { ssr: false });
 
 type Phase = "loading" | "hero" | "main" | "envelope";
 
@@ -49,6 +52,12 @@ export default function Home() {
 
   return (
     <main className="bg-[#0a0a0a] min-h-screen overflow-x-hidden">
+      {/* Snowfall Effect */}
+      {phase !== "loading" && <Snowfall />}
+      
+      {/* Share Button */}
+      {phase !== "loading" && <ShareButton />}
+      
       {/* Sound Toggle Button */}
       {phase !== "loading" && (
         <motion.button
@@ -104,6 +113,7 @@ export default function Home() {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             <EnvelopeSection userName={userName} />
+            <Footer />
           </motion.div>
         )}
       </AnimatePresence>
