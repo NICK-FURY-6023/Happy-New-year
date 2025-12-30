@@ -159,9 +159,9 @@ export default function EnvelopeSection({ userName }: EnvelopeSectionProps) {
               transition={{ delay: 0.3, duration: 0.8, type: "spring" }}
             >
               {/* Premium Glass Card - Apple Style */}
-              <div className="relative bg-gradient-to-br from-white/15 via-white/10 to-white/5 backdrop-blur-2xl rounded-[2rem] p-8 md:p-12 max-w-md w-full border border-white/20 text-center shadow-2xl shadow-purple-500/10 overflow-hidden">
+              <div className="relative bg-gradient-to-br from-black/80 via-[#1a0a2e]/90 to-black/80 backdrop-blur-2xl rounded-[2rem] p-8 md:p-12 max-w-md w-full border border-white/30 text-center shadow-2xl shadow-purple-500/20 overflow-hidden">
                 {/* Subtle gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/10 via-transparent to-pink-500/10 rounded-[2rem]" />
+                <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/20 via-transparent to-pink-500/20 rounded-[2rem]" />
                 
                 {/* Content */}
                 <div className="relative z-10">
